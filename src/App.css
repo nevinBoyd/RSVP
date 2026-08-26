@@ -1,0 +1,54 @@
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: #2c5f2d;
+}
+
+.site-title {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.admin-header .site-title {
+  color: #fff;
+}
+
+.admin-nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-nav a {
+  color: #eaf4ea;
+}
+
+.site-main {
+  flex: 1;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+.page h1 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 480px) {
+  .site-main {
+    padding: 1rem;
+  }
+}
