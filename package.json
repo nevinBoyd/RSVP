@@ -7,9 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check-db": "node scripts/check-connection.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.2"
