@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { createEvent, deleteEvent, fetchEventById, updateEvent } from '../../lib/events'
 
 // Routes: "/admin/event/new" and "/admin/event/:eventId"
@@ -7,10 +7,11 @@ import { createEvent, deleteEvent, fetchEventById, updateEvent } from '../../lib
 // existing event (fetch + prefill); otherwise we're creating a new one.
 //
 // Phase 3 scope: title, date/time, location, address, notes, and status
-// only. Flyer image and categories are deliberately left out - they need
-// their own forms/UI (file upload, category list editor) and are planned
-// as separate phases. Delete was added alongside edit since there was no
-// other way to remove a test/mistaken event from the admin side.
+// only. Flyer image is deliberately left out - it needs its own upload
+// UI and is planned as a separate phase. Delete was added alongside edit
+// since there was no other way to remove a test/mistaken event from the
+// admin side. Category management (Phase 5) lives on its own page,
+// linked from here once an event exists to edit.
 const emptyForm = {
   title: '',
   event_date: '',
@@ -124,6 +125,12 @@ function EventFormPage() {
   return (
     <div className="page">
       <h1>{isEditing ? 'Edit Event' : 'Create Event'}</h1>
+
+      {isEditing && (
+        <p>
+          <Link to={`/admin/event/${eventId}/categories`}>Manage Categories &amp; Sign-ups</Link>
+        </p>
+      )}
 
       <form onSubmit={handleSubmit} className="form">
         <label>
