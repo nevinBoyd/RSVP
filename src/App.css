@@ -105,6 +105,29 @@
   font-weight: 600;
 }
 
+.form-success {
+  color: #2c5f2d;
+  font-weight: 600;
+}
+
+.form-actions-split {
+  gap: 0.75rem;
+}
+
+.button-danger {
+  padding: 0.6rem 1.25rem;
+  background: #fff;
+  color: #b3261e;
+  border: 1px solid #b3261e;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.button-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Event lists (public list + admin dashboard) */
 
 .event-list {
@@ -157,4 +180,37 @@
   color: #eaf4ea;
   padding: 0.35rem 0.75rem;
   border-radius: 4px;
+}
+
+/* Public event page: RSVP button + Who's Coming list */
+
+.button-link {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  background: #2c5f2d;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.button-link:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.whos-coming {
+  margin-top: 1.5rem;
+}
+
+.whos-coming h2 {
+  font-size: 1.1rem;
+}
+
+.whos-coming ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
