@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { createEvent, fetchEventById, updateEvent } from '../../lib/events'
+import { createEvent, deleteEvent, fetchEventById, updateEvent } from '../../lib/events'
 
 // Routes: "/admin/event/new" and "/admin/event/:eventId"
 // Create/Edit Event page. When eventId is present we're editing an
@@ -9,7 +9,8 @@ import { createEvent, fetchEventById, updateEvent } from '../../lib/events'
 // Phase 3 scope: title, date/time, location, address, notes, and status
 // only. Flyer image and categories are deliberately left out - they need
 // their own forms/UI (file upload, category list editor) and are planned
-// as separate phases.
+// as separate phases. Delete was added alongside edit since there was no
+// other way to remove a test/mistaken event from the admin side.
 const emptyForm = {
   title: '',
   event_date: '',
@@ -29,6 +30,7 @@ function EventFormPage() {
   const [form, setForm] = useState(emptyForm)
   const [loading, setLoading] = useState(isEditing)
   const [saving, setSaving] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -90,6 +92,24 @@ function EventFormPage() {
       setError(err.message)
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function handleDelete() {
+    const confirmed = window.confirm(
+      `Delete "${form.title || 'this event'}"? This also removes every RSVP for it. This can't be undone.`,
+    )
+    if (!confirmed) return
+
+    setError('')
+    setDeleting(true)
+
+    try {
+      await deleteEvent(eventId)
+      navigate('/admin')
+    } catch (err) {
+      setError(err.message)
+      setDeleting(false)
     }
   }
 
@@ -161,10 +181,20 @@ function EventFormPage() {
 
         {error && <p className="form-error">{error}</p>}
 
-        <div className="form-actions">
-          <button type="submit" disabled={saving}>
+        <div className="form-actions form-actions-split">
+          <button type="submit" disabled={saving || deleting}>
             {saving ? 'Saving…' : isEditing ? 'Save Changes' : 'Create Event'}
           </button>
+          {isEditing && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={saving || deleting}
+              className="button-danger"
+            >
+              {deleting ? 'Deleting…' : 'Delete Event'}
+            </button>
+          )}
         </div>
       </form>
     </div>
@@ -172,4 +202,3 @@ function EventFormPage() {
 }
 
 export default EventFormPage
-
