@@ -70,3 +70,14 @@ export async function updateEvent(eventId, eventData) {
   if (error) throw error
   return data
 }
+
+// Admin only - RLS's "admin has full access to events" policy is what
+// actually allows this; an anon/public request would be rejected
+// server-side regardless of what this function does. Deleting an event
+// cascades to its rsvps/categories/category_slots/signups (see the
+// "on delete cascade" foreign keys in schema.sql), so this removes
+// everything tied to the event, not just the event row itself.
+export async function deleteEvent(eventId) {
+  const { error } = await supabase.from('events').delete().eq('id', eventId)
+  if (error) throw error
+}
