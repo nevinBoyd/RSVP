@@ -2,10 +2,11 @@ import { supabase } from './supabaseClient'
 
 // Data-access layer for RSVP submission and token-based edit/cancel.
 // These all call narrow Postgres RPC functions (see
-// supabase/migrations/002_rsvp_submission.sql) rather than touching the
-// "rsvps" table directly - the table itself has no public insert/select
-// policy on purpose, so a resident can only ever affect their own RSVP,
-// never browse or edit anyone else's.
+// supabase/migrations/002_rsvp_submission.sql and
+// .../004_find_rsvp.sql) rather than touching the "rsvps" table directly
+// - the table itself has no public insert/select policy on purpose, so a
+// resident can only ever affect their own RSVP, never browse or edit
+// anyone else's through a direct table query.
 
 export async function submitRsvp({ eventId, name, status, comment }) {
   const { data, error } = await supabase.rpc('submit_rsvp', {
@@ -57,4 +58,57 @@ export async function fetchPublicRsvps(eventId) {
 
   if (error) throw error
   return data
+}
+
+// Look up an existing RSVP's edit token by name, for residents who don't
+// have (or never saved) their confirmation link. This is a deliberate
+// trade-off, not a security boundary - see the comment on
+// find_rsvp_token() in supabase/migrations/004_find_rsvp.sql for why
+// that's an acceptable choice here. Returns null if no RSVP matches that
+// name for this event (not an error - "not found" is a normal outcome
+// here, e.g. a typo or someone who hasn't RSVP'd yet).
+export async function findRsvpToken(eventId, name) {
+  const { data, error } = await supabase.rpc('find_rsvp_token', {
+    p_event_id: eventId,
+    p_name: name,
+  })
+
+  if (error) throw error
+  return data
+}
+
+// --- Remembering an RSVP on this device (localStorage) ---------------------
+// Purely a convenience for returning on the same device (phone, tablet,
+// or computer) - not a credential, and never the only way in (Find My
+// RSVP by name always works too). Wrapped in try/catch since localStorage
+// can throw in some browser contexts (private browsing, storage
+// disabled, etc.) - none of that should ever break the actual RSVP flow,
+// just silently skip the "remember me" convenience.
+
+function rsvpStorageKey(eventId) {
+  return `rsvp_token:${eventId}`
+}
+
+export function rememberRsvpToken(eventId, token) {
+  try {
+    window.localStorage.setItem(rsvpStorageKey(eventId), token)
+  } catch {
+    // Ignore - remembering the RSVP is a nice-to-have, not required.
+  }
+}
+
+export function getRememberedRsvpToken(eventId) {
+  try {
+    return window.localStorage.getItem(rsvpStorageKey(eventId))
+  } catch {
+    return null
+  }
+}
+
+export function forgetRsvpToken(eventId) {
+  try {
+    window.localStorage.removeItem(rsvpStorageKey(eventId))
+  } catch {
+    // Ignore.
+  }
 }
