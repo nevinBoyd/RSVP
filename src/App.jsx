@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import PublicLayout from './components/PublicLayout'
 import AdminLayout from './components/AdminLayout'
+import RequireAdminAuth from './components/RequireAdminAuth'
 
 import EventListPage from './pages/public/EventListPage'
 import PublicEventPage from './pages/public/PublicEventPage'
@@ -33,13 +34,16 @@ function App() {
       {/* Admin login has no shared nav chrome */}
       <Route path="/admin/login" element={<AdminLoginPage />} />
 
-      {/* Admin (Cass-only) routes */}
-      <Route element={<AdminLayout />}>
-        <Route path="/admin" element={<AdminDashboardPage />} />
-        <Route path="/admin/event/new" element={<EventFormPage />} />
-        <Route path="/admin/event/:eventId" element={<EventFormPage />} />
-        <Route path="/admin/event/:eventId/categories" element={<AdminCategoriesPage />} />
-        <Route path="/admin/event/:eventId/attendees" element={<AdminAttendeesPage />} />
+      {/* Admin-only routes - RequireAdminAuth redirects to /admin/login
+          unless a Supabase Auth session exists. */}
+      <Route element={<RequireAdminAuth />}>
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminDashboardPage />} />
+          <Route path="/admin/event/new" element={<EventFormPage />} />
+          <Route path="/admin/event/:eventId" element={<EventFormPage />} />
+          <Route path="/admin/event/:eventId/categories" element={<AdminCategoriesPage />} />
+          <Route path="/admin/event/:eventId/attendees" element={<AdminAttendeesPage />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />
