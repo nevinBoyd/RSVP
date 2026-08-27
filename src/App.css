@@ -214,3 +214,117 @@
   flex-direction: column;
   gap: 0.4rem;
 }
+
+/* Categories & signups (public detail page, edit-RSVP sign-up section,
+   admin category/slot management) */
+
+.category-detail,
+.category-manage {
+  margin-top: 1rem;
+}
+
+.category-manage h2 {
+  font-size: 1.1rem;
+}
+
+.category-manage-card {
+  padding: 0.85rem 1rem;
+  background: #fff;
+  border: 1px solid #e3e1da;
+  border-radius: 6px;
+  margin-bottom: 0.85rem;
+}
+
+.slot-manage {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.slot-card {
+  padding: 0.65rem 0.85rem;
+  background: #f7f6f3;
+  border: 1px solid #e3e1da;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+}
+
+.slot-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.capacity-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #2c5f2d;
+  background: #eaf4ea;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+
+.capacity-badge.capacity-full {
+  color: #b3261e;
+  background: #fbe9e7;
+}
+
+.signup-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.4rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.inline-form {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.inline-form input {
+  flex: 1;
+  min-width: 160px;
+  font: inherit;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #c9c7c0;
+  border-radius: 4px;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #b3261e;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Checkbox rows for picking slots on the RSVP form itself - overrides
+   .form label's column layout (used for every other label) with a normal
+   horizontal checkbox row. */
+.form label.slot-checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+  margin: 0.35rem 0;
+}
+
+/* "Find My RSVP by name" box on the public event page */
+
+.find-rsvp {
+  margin-top: 0.75rem;
+  max-width: 480px;
+}
+
+.find-rsvp .inline-form {
+  margin-top: 0.35rem;
+}
